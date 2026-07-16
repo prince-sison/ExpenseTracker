@@ -17,7 +17,7 @@ public class Budget : BaseEntity
     public static Budget Create(Guid categoryId, decimal limitAmount, int month, int year)
         => new() { CategoryId = categoryId, LimitAmount = limitAmount, Month = month, Year = year };
 
-    public void Update(decimal limitAmount, int month, int year)
+    public void UpdateLimit(decimal limitAmount)
     {
         LimitAmount = limitAmount;
         UpdatedAt = DateTime.UtcNow;

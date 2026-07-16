@@ -5,7 +5,7 @@ namespace ExpenseTracker.Domain.Entities;
 public class Expense : BaseEntity
 {
     public decimal Amount { get; private set; }
-    public string Description { get; private set; }
+    public string Description { get; private set; } = string.Empty;
     public Guid CategoryId { get; private set; }
     public DateOnly Date { get; private set; }
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
