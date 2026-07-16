@@ -1,0 +1,44 @@
+name: expense-tracker-sql
+
+services:
+  expense-tracker-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: expense-tracker-db
+    environment:
+      MSSQL_SA_PASSWORD: ${DB_ADMIN_PASSWORD:-MyStrongPassword123}
+      ACCEPT_EULA: "Y"
+      MSSQL_AGENT_ENABLED: "true"
+      MSSQL_PID: Developer
+    ports:
+      - "${DB_HOST_PORT:-1433}:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    restart: always
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U ${DB_ADMIN_USER:-sa} -P ${DB_ADMIN_PASSWORD:-MyStrongPassword123} -Q 'SELECT 1' || exit 1",
+        ]
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 3s
+
+  expense-tracker-api:
+    build:
+      context: ../../..
+      dockerfile: src/ExpenseTracker.API/Dockerfile
+    container_name: expense-tracker-api
+    depends_on:
+      expense-tracker-db:
+        condition: service_healthy
+    restart: unless-stopped
+    ports:
+      - "${API_HOST_PORT:-8080}:8080"
+    environment:
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__DefaultConnection: Server=${DB_HOST:-expense-tracker-db};Database=${DB_NAME:-ExpenseTracker};User Id=${DB_ADMIN_USER:-sa};Password=${DB_ADMIN_PASSWORD:-MyStrongPassword123};TrustServerCertificate=True;MultipleActiveResultSets=true
+
+volumes:
+  mssql-data:
