@@ -10,7 +10,7 @@ public class Budget : BaseEntity
     public int Year { get; private set; }
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
-    public Category Category { get; private set; } = null!;
+    public Category? Category { get; private set; }
 
     private Budget() { }
 
