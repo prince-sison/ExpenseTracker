@@ -49,12 +49,12 @@ public class BudgetService(IBudgetRepository budgetRepo, ICategoryRepository cat
         return MapToDto(budget);
     }
 
-    public async Task DeleteBudgetAsync(DeleteBudgetDto dto)
+    public async Task DeleteBudgetAsync(Guid id)
     {
-        if (dto.Id == Guid.Empty)
-            throw new ArgumentException("Budget ID cannot be empty.", nameof(dto.Id));
+        if (id == Guid.Empty)
+            throw new ArgumentException("Budget ID cannot be empty.", nameof(id));
 
-        var budget = await _budgetRepo.GetByIdAsync(dto.Id) ?? throw new KeyNotFoundException($"Budget '{dto.Id}' not found.");
+        var budget = await _budgetRepo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Budget '{id}' not found.");
 
         await _budgetRepo.DeleteAsync(budget);
     }

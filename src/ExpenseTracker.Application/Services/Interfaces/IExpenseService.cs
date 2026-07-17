@@ -7,5 +7,5 @@ public interface IExpenseService
     Task<IEnumerable<ExpenseResponseDto>> GetExpensesAsync(int month, int year, Guid? categoryId = null);
     Task<ExpenseResponseDto> CreateExpenseAsync(CreateExpenseDto dto);
     Task<ExpenseResponseDto> UpdateExpenseAsync(UpdateExpenseDto dto);
-    Task DeleteExpenseAsync(DeleteExpenseDto dto);
+    Task DeleteExpenseAsync(Guid id);
 }

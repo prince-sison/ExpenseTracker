@@ -43,12 +43,12 @@ public class CategoryService(ICategoryRepository categoryRepo, IValidator<Create
         return MapToDto(category);
     }
 
-    public async Task DeleteCategoryAsync(DeleteCategoryDto dto)
+    public async Task DeleteCategoryAsync(Guid id)
     {
-        if (dto.Id == Guid.Empty)
-            throw new ArgumentException("Category ID cannot be empty.", nameof(dto.Id));
+        if (id == Guid.Empty)
+            throw new ArgumentException("Category ID cannot be empty.", nameof(id));
 
-        var category = await _categoryRepo.GetByIdAsync(dto.Id) ?? throw new KeyNotFoundException($"Category '{dto.Id}' not found.");
+        var category = await _categoryRepo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Category '{id}' not found.");
 
         if (category.IsDefault)
             throw new InvalidOperationException("Default categories cannot be deleted.");

@@ -26,13 +26,12 @@ public class ExpenseService(IExpenseRepository expenseRepo, ICategoryRepository 
         return MapToDto(expense);
     }
 
-    public async Task DeleteExpenseAsync(DeleteExpenseDto dto)
+    public async Task DeleteExpenseAsync(Guid id)
     {
-        var expenseId = dto.Id;
-        if (expenseId == Guid.Empty)
-            throw new ArgumentException("Expense ID cannot be empty.", nameof(dto.Id));
+        if (id == Guid.Empty)
+            throw new ArgumentException("Expense ID cannot be empty.", nameof(id));
 
-        var expense = await _expenseRepo.GetByIdAsync(expenseId) ?? throw new KeyNotFoundException($"Expense '{expenseId}' not found.");
+        var expense = await _expenseRepo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Expense '{id}' not found.");
 
         await _expenseRepo.DeleteAsync(expense);
     }
