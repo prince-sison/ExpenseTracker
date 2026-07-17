@@ -42,11 +42,20 @@ public class ExpenseService(IExpenseRepository expenseRepo, ICategoryRepository 
         return expenses.Select(MapToDto);
     }
 
-    public async Task<ExpenseResponseDto> UpdateExpenseAsync(UpdateExpenseDto dto)
+    public async Task<ExpenseResponseDto?> GetExpenseByIdAsync(Guid id)
+    {
+        if (id == Guid.Empty)
+            throw new ArgumentException("Expense ID cannot be empty.", nameof(id));
+
+        var expense = await _expenseRepo.GetByIdAsync(id);
+        return expense is null ? null : MapToDto(expense);
+    }
+
+    public async Task<ExpenseResponseDto> UpdateExpenseAsync(Guid id, UpdateExpenseDto dto)
     {
         await _updateValidator.ValidateAndThrowAsync(dto);
 
-        var expense = await _expenseRepo.GetByIdAsync(dto.Id) ?? throw new KeyNotFoundException($"Expense '{dto.Id}' not found.");
+        var expense = await _expenseRepo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Expense '{id}' not found.");
 
         expense.Update(dto.Amount, dto.Description, dto.CategoryId, dto.Date);
         await _expenseRepo.UpdateAsync(expense);
