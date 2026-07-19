@@ -1,0 +1,26 @@
+# Build artifacts
+**/bin/
+**/obj/
+
+# Publish output
+**/publish/
+
+# IDE / VS
+**/.vs/
+**/.vscode/
+**/.idea/
+
+# Node / frontend
+**/node_modules/
+
+# Git
+**/.git/
+**/.gitignore
+
+# Docker
+**/Dockerfile*
+**/.dockerignore
+
+# Misc
+**/*.user
+**/.env

@@ -27,7 +27,7 @@ services:
 
   expense-tracker-api:
     build:
-      context: ../../..
+      context: ../..
       dockerfile: src/ExpenseTracker.API/Dockerfile
     container_name: expense-tracker-api
     depends_on:

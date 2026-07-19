@@ -53,6 +53,18 @@ function ApplyMigrations {
     return $true
 }
 
+# Start the database, wait for it to be healthy, then apply EF Core migrations.
+function EnsureDbReady {
+    Write-Output "Starting database..."
+    &docker compose -f $ComposeFile up -d expense-tracker-db
+
+    if (-not (WaitForDbHealthy)) {
+        return $false
+    }
+
+    return (ApplyMigrations)
+}
+
 function StartCommand {
     param (
         [string]$subCommand
@@ -60,24 +72,25 @@ function StartCommand {
 
     switch ($subCommand.ToLower()) {
         "sql" {
-            Write-Output "Starting database..."
-            &docker compose -f $ComposeFile up -d expense-tracker-db
-
-            # Wait for the database container to report healthy before migrating.
-            if (-not (WaitForDbHealthy)) {
-                exit 1
-            }
-
-            # Apply EF Core migrations once the database is ready.
-            if (-not (ApplyMigrations)) {
+            if (-not (EnsureDbReady)) {
                 exit 1
             }
         }
         "api" {
+            # Ensure the database is up, healthy, and migrated before the API starts.
+            if (-not (EnsureDbReady)) {
+                exit 1
+            }
+
             Write-Output "Starting API..."
             &docker compose -f $ComposeFile up -d --build expense-tracker-api
         }
         default {
+            # Ensure the database is up, healthy, and migrated before the API starts.
+            if (-not (EnsureDbReady)) {
+                exit 1
+            }
+
             Write-Output "Starting all services (db + api)..."
             &docker compose -f $ComposeFile up -d --build
         }
