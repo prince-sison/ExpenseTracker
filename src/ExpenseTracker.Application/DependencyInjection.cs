@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ExpenseTracker.Application.Services.Interfaces;
 using ExpenseTracker.Application.Services.Implementations;
 using FluentValidation;
-using ExpenseTracker.Application.Validators;
 
 namespace ExpenseTracker.Application;
 
@@ -15,7 +14,7 @@ public static class DependencyInjection
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IBudgetService, BudgetService>();
 
-        services.AddValidatorsFromAssemblyContaining<CreateExpenseValidator>();
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
         return services;
     }
