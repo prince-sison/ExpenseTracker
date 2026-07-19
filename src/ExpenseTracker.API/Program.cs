@@ -35,4 +35,7 @@ app.UseSwaggerUI();
 app.UseCors("AllowFrontend");
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.MapControllers();
+
+app.MapGet("/health", () => Results.Ok(new { status = "Healthy" }));
+
 app.Run();

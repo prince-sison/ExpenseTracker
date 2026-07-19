@@ -6,12 +6,11 @@ using FluentValidation;
 
 namespace ExpenseTracker.Application.Services.Implementations;
 
-public class BudgetService(IBudgetRepository budgetRepo, ICategoryRepository categoryRepo, IValidator<CreateBudgetDto> createValidator, IValidator<UpdateBudgetDto> updateValidator) : IBudgetService
+public class BudgetService(IBudgetRepository budgetRepo, ICategoryRepository categoryRepo, IValidator<UpsertBudgetDto> upsertValidator) : IBudgetService
 {
     private readonly IBudgetRepository _budgetRepo = budgetRepo;
     private readonly ICategoryRepository _categoryRepo = categoryRepo;
-    private readonly IValidator<CreateBudgetDto> _createValidator = createValidator;
-    private readonly IValidator<UpdateBudgetDto> _updateValidator = updateValidator;
+    private readonly IValidator<UpsertBudgetDto> _upsertValidator = upsertValidator;
 
     public async Task<IEnumerable<BudgetResponseDto>> GetBudgetsAsync(int month, int year)
     {
@@ -19,31 +18,23 @@ public class BudgetService(IBudgetRepository budgetRepo, ICategoryRepository cat
         return budgets.Select(MapToDto);
     }
 
-    public async Task<BudgetResponseDto> CreateBudgetAsync(CreateBudgetDto dto)
+    public async Task<BudgetResponseDto> UpsertBudgetAsync(UpsertBudgetDto dto)
     {
-        await _createValidator.ValidateAndThrowAsync(dto);
+        await _upsertValidator.ValidateAndThrowAsync(dto);
 
         _ = await _categoryRepo.GetByIdAsync(dto.CategoryId) ?? throw new KeyNotFoundException($"Category '{dto.CategoryId}' not found.");
 
-        var existing = await _budgetRepo.GetByCategoryAndMonthAsync(dto.CategoryId, dto.Month, dto.Year);
-        if (existing is not null)
-            throw new InvalidOperationException($"A budget for this category already exists for {dto.Month:00}/{dto.Year}.");
-
-        var budget = Budget.Create(dto.CategoryId, dto.LimitAmount, dto.Month, dto.Year);
-        await _budgetRepo.AddAsync(budget);
-
-        budget = (await _budgetRepo.GetByIdAsync(budget.Id))!;
-        return MapToDto(budget);
-    }
-
-    public async Task<BudgetResponseDto> UpdateBudgetAsync(UpdateBudgetDto dto)
-    {
-        await _updateValidator.ValidateAndThrowAsync(dto);
-
-        var budget = await _budgetRepo.GetByIdAsync(dto.Id) ?? throw new KeyNotFoundException($"Budget '{dto.Id}' not found.");
-
-        budget.UpdateLimit(dto.LimitAmount);
-        await _budgetRepo.UpdateAsync(budget);
+        var budget = await _budgetRepo.GetByCategoryAndMonthAsync(dto.CategoryId, dto.Month, dto.Year);
+        if (budget is null)
+        {
+            budget = Budget.Create(dto.CategoryId, dto.LimitAmount, dto.Month, dto.Year);
+            await _budgetRepo.AddAsync(budget);
+        }
+        else
+        {
+            budget.UpdateLimit(dto.LimitAmount);
+            await _budgetRepo.UpdateAsync(budget);
+        }
 
         budget = (await _budgetRepo.GetByIdAsync(budget.Id))!;
         return MapToDto(budget);

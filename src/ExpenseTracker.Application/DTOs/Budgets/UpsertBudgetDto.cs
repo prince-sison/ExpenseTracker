@@ -1,6 +1,6 @@
 namespace ExpenseTracker.Application.DTOs.Budgets;
 
-public record CreateBudgetDto(
+public record UpsertBudgetDto(
     Guid CategoryId,
     decimal LimitAmount,
     int Month,

@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace ExpenseTracker.Application.Validators;
 
-public class CreateBudgetValidator : AbstractValidator<CreateBudgetDto>
+public class UpsertBudgetValidator : AbstractValidator<UpsertBudgetDto>
 {
-    public CreateBudgetValidator()
+    public UpsertBudgetValidator()
     {
         RuleFor(x => x.CategoryId)
             .NotEmpty().WithMessage("A category is required.");
