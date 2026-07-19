@@ -11,6 +11,48 @@ Commands: start, stop, reset, logs, help.
 # Resolve the compose file relative to this script so it works from any cwd.
 $ComposeFile = Join-Path $PSScriptRoot "SQL\docker-compose.yml"
 
+# Repository root (one level up from the tools folder that hosts this script).
+$RepoRoot = Split-Path -Parent $PSScriptRoot
+
+function WaitForDbHealthy {
+    param (
+        [string]$containerName = "expense-tracker-db",
+        [int]$timeoutSeconds = 120
+    )
+
+    Write-Output "Waiting for '$containerName' to be healthy..."
+    $elapsed = 0
+    while ($elapsed -lt $timeoutSeconds) {
+        $status = (&docker inspect -f "{{.State.Health.Status}}" $containerName 2>$null)
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Container '$containerName' was not found. Did it start?"
+            return $false
+        }
+
+        if ($status -eq "healthy") {
+            Write-Output "Database is healthy."
+            return $true
+        }
+
+        Start-Sleep -Seconds 3
+        $elapsed += 3
+    }
+
+    Write-Error "Timed out after $timeoutSeconds seconds waiting for '$containerName' to become healthy."
+    return $false
+}
+
+function ApplyMigrations {
+    Write-Output "Applying EF Core migrations..."
+    &dotnet ef database update -p (Join-Path $RepoRoot "src/ExpenseTracker.Infrastructure") -s (Join-Path $RepoRoot "src/ExpenseTracker.API")
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Migration failed (dotnet ef exited with code $LASTEXITCODE)."
+        return $false
+    }
+    Write-Output "Migrations applied successfully."
+    return $true
+}
+
 function StartCommand {
     param (
         [string]$subCommand
@@ -20,6 +62,16 @@ function StartCommand {
         "sql" {
             Write-Output "Starting database..."
             &docker compose -f $ComposeFile up -d expense-tracker-db
+
+            # Wait for the database container to report healthy before migrating.
+            if (-not (WaitForDbHealthy)) {
+                exit 1
+            }
+
+            # Apply EF Core migrations once the database is ready.
+            if (-not (ApplyMigrations)) {
+                exit 1
+            }
         }
         "api" {
             Write-Output "Starting API..."
