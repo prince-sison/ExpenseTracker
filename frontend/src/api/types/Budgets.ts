@@ -9,3 +9,10 @@ export interface Budgets {
   createdAt: string; // ISO 8601 format
   updatedAt: string; // ISO 8601 format
 }
+
+export interface UpsertBudgetRequest {
+  categoryId: string;
+  limitAmount: number;
+  month: number;
+  year: number;
+}
