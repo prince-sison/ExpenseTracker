@@ -1,10 +1,10 @@
 import axios from "axios";
 
-export const api = axios.create({
+export const baseApiProvider = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-api.interceptors.response.use(
+baseApiProvider.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response ? error.response.status : null;
