@@ -1,19 +1,23 @@
-import { api } from "../baseApi";
+import { baseApiProvider as api } from "../baseApi";
+import { buildPath, Routes } from "../router/routes";
 import type { UpsertBudgetRequest } from "../types/Budgets";
 
 export const budgetService = {
   getBudget: async (month: number, year: number): Promise<number> => {
-    const response = await api.get("/budget", {
+    const url = buildPath(Routes.getBudgetsByMonthAndYear);
+    const response = await api.get(url, {
       params: { month, year },
     });
     return response.data;
   },
 
   upsertBudget: async (budgetData: UpsertBudgetRequest): Promise<void> => {
-    await api.post("/budget", budgetData);
+    const url = buildPath(Routes.upsertBudget);
+    await api.post(url, budgetData);
   },
 
   deleteBudget: async (budgetId: string): Promise<void> => {
-    await api.delete(`/budget/${budgetId}`);
+    const url = buildPath(Routes.deleteBudget, { budgetId });
+    await api.delete(url);
   },
 };

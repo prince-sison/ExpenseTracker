@@ -1,4 +1,5 @@
-import { api } from "../baseApi";
+import { baseApiProvider as api } from "../baseApi";
+import { buildPath, Routes } from "../router/routes";
 import type {
   Expenses,
   CreateExpenseRequest,
@@ -11,21 +12,24 @@ export const expenseService = {
     year: number,
     categoryId?: string,
   ): Promise<Expenses[]> => {
-    const response = await api.get("/expenses", {
+    const url = buildPath(Routes.getAllExpenses);
+    const response = await api.get(url, {
       params: { month, year, categoryId },
     });
     return response.data;
   },
 
   getExpenseById: async (expenseId: string): Promise<Expenses> => {
-    const response = await api.get(`/expenses/${expenseId}`);
+    const url = buildPath(Routes.getByIdExpense, { expenseId });
+    const response = await api.get(url);
     return response.data;
   },
 
   createExpense: async (
     expenseData: CreateExpenseRequest,
   ): Promise<Expenses> => {
-    const response = await api.post("/expenses", expenseData);
+    const url = buildPath(Routes.createExpense);
+    const response = await api.post(url, expenseData);
     return response.data;
   },
 
@@ -33,11 +37,13 @@ export const expenseService = {
     expenseId: string,
     expenseData: UpdateExpenseRequest,
   ): Promise<Expenses> => {
-    const response = await api.put(`/expenses/${expenseId}`, expenseData);
+    const url = buildPath(Routes.updateExpense, { expenseId });
+    const response = await api.put(url, expenseData);
     return response.data;
   },
 
   deleteExpense: async (expenseId: string): Promise<void> => {
-    await api.delete(`/expenses/${expenseId}`);
+    const url = buildPath(Routes.deleteExpense, { expenseId });
+    await api.delete(url);
   },
 };

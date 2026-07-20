@@ -1,4 +1,5 @@
-import { api } from "../baseApi";
+import { baseApiProvider as api } from "../baseApi";
+import { buildPath, Routes } from "../router/routes";
 import type {
   Categories,
   CreateCategoryRequest,
@@ -7,25 +8,29 @@ import type {
 
 export const categoryService = {
   getAllCategories: async (): Promise<Categories[]> => {
-    const response = await api.get("/categories");
+    const url = buildPath(Routes.getAllCategories);
+    const response = await api.get(url);
     return response.data;
   },
 
   createCategory: async (
     categoryData: CreateCategoryRequest,
   ): Promise<Categories> => {
-    const response = await api.post("/categories", categoryData);
+    const url = buildPath(Routes.createCategory);
+    const response = await api.post(url, categoryData);
     return response.data;
   },
 
   updateCategory: async (
     categoryData: UpdateCategoryRequest,
   ): Promise<Categories> => {
-    const response = await api.put("/categories", categoryData);
+    const url = buildPath(Routes.updateCategory);
+    const response = await api.put(url, categoryData);
     return response.data;
   },
 
   deleteCategory: async (categoryId: string): Promise<void> => {
-    await api.delete(`/categories/${categoryId}`);
+    const url = buildPath(Routes.deleteCategory, { categoryId });
+    await api.delete(url);
   },
 };

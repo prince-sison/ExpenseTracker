@@ -18,7 +18,6 @@ export interface CreateExpenseRequest {
 }
 
 export interface UpdateExpenseRequest {
-  id: string;
   amount: number;
   description: string;
   categoryId: string;
