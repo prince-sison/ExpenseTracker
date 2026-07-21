@@ -7,21 +7,17 @@ export const baseApiProvider = axios.create({
 baseApiProvider.interceptors.response.use(
   (response) => response,
   (error) => {
-    const status = error.response ? error.response.status : null;
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status ?? null;
 
-    if (status === 401) {
-      // Handle unauthorized error, e.g., redirect to login
-      window.location.href = "/login"; // Redirect to login page
-    } else if (status === 500) {
-      // Handle internal server error
-      console.error(
-        "Internal server error:",
-        error.response ? error.response.data : error.message,
-      );
-    } else if (!error.response) {
-      console.error("Network error:", error.message);
+      if (status === 500) {
+        console.error("Internal server error:", error.response?.data);
+      } else if (!error.response) {
+        console.error("Network error:", error.message);
+      }
     }
 
+    // Let the caller/UI decide how to handle the error (including 401s).
     return Promise.reject(error);
   },
 );

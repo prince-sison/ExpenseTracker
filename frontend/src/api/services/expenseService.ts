@@ -1,7 +1,7 @@
 import { baseApiProvider as api } from "../baseApi";
 import { buildPath, Routes } from "../router/routes";
 import type {
-  Expenses,
+  Expense,
   CreateExpenseRequest,
   UpdateExpenseRequest,
 } from "../types/Expenses";
@@ -11,7 +11,7 @@ export const expenseService = {
     month: number,
     year: number,
     categoryId?: string,
-  ): Promise<Expenses[]> => {
+  ): Promise<Expense[]> => {
     const url = buildPath(Routes.getAllExpenses);
     const response = await api.get(url, {
       params: { month, year, categoryId },
@@ -19,7 +19,7 @@ export const expenseService = {
     return response.data;
   },
 
-  getExpenseById: async (expenseId: string): Promise<Expenses> => {
+  getExpenseById: async (expenseId: string): Promise<Expense> => {
     const url = buildPath(Routes.getByIdExpense, { expenseId });
     const response = await api.get(url);
     return response.data;
@@ -27,7 +27,7 @@ export const expenseService = {
 
   createExpense: async (
     expenseData: CreateExpenseRequest,
-  ): Promise<Expenses> => {
+  ): Promise<Expense> => {
     const url = buildPath(Routes.createExpense);
     const response = await api.post(url, expenseData);
     return response.data;
@@ -36,7 +36,7 @@ export const expenseService = {
   updateExpense: async (
     expenseId: string,
     expenseData: UpdateExpenseRequest,
-  ): Promise<Expenses> => {
+  ): Promise<Expense> => {
     const url = buildPath(Routes.updateExpense, { expenseId });
     const response = await api.put(url, expenseData);
     return response.data;

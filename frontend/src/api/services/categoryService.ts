@@ -1,13 +1,13 @@
 import { baseApiProvider as api } from "../baseApi";
 import { buildPath, Routes } from "../router/routes";
 import type {
-  Categories,
+  Category,
   CreateCategoryRequest,
   UpdateCategoryRequest,
 } from "../types/Categories";
 
 export const categoryService = {
-  getAllCategories: async (): Promise<Categories[]> => {
+  getAllCategories: async (): Promise<Category[]> => {
     const url = buildPath(Routes.getAllCategories);
     const response = await api.get(url);
     return response.data;
@@ -15,7 +15,7 @@ export const categoryService = {
 
   createCategory: async (
     categoryData: CreateCategoryRequest,
-  ): Promise<Categories> => {
+  ): Promise<Category> => {
     const url = buildPath(Routes.createCategory);
     const response = await api.post(url, categoryData);
     return response.data;
@@ -23,7 +23,7 @@ export const categoryService = {
 
   updateCategory: async (
     categoryData: UpdateCategoryRequest,
-  ): Promise<Categories> => {
+  ): Promise<Category> => {
     const url = buildPath(Routes.updateCategory);
     const response = await api.put(url, categoryData);
     return response.data;

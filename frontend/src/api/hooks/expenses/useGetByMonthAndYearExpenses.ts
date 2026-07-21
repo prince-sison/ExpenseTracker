@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { expenseService } from "../../services/expenseService";
-import type { Expenses } from "../../types/Expenses";
+import type { Expense } from "../../types/Expenses";
 import { queryKeys } from "../../router/queryKeys";
 
 export const useGetByMonthAndYearExpenses = (
@@ -10,7 +10,7 @@ export const useGetByMonthAndYearExpenses = (
 ) => {
   return useQuery({
     queryKey: queryKeys.expenses.list(month, year, categoryId),
-    queryFn: async (): Promise<Expenses[]> => {
+    queryFn: async (): Promise<Expense[]> => {
       const response = await expenseService.getAllExpenses(
         month,
         year,

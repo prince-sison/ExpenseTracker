@@ -1,13 +1,13 @@
 /**
- * Sentralong React Query keys.
+ * Centralized React Query keys.
  *
  * Hierarchical (factory) pattern:
- * - `.all` ang base key ng bawat entity — gamitin sa `invalidateQueries`
- *   para i-refresh ang LAHAT ng query ng entity na iyon.
- * - `.list()` / `.detail()` para sa mas tiyak na queries.
+ * - `.all` is the base key of each entity — use it with `invalidateQueries`
+ *   to refresh ALL queries of that entity.
+ * - `.list()` / `.detail()` for more specific queries.
  *
- * Halimbawa: `invalidateQueries({ queryKey: queryKeys.expenses.all })`
- * ay magma-match sa lahat ng `["expenses", ...]`.
+ * Example: `invalidateQueries({ queryKey: queryKeys.expenses.all })`
+ * will match all `["expenses", ...]`.
  */
 export const queryKeys = {
   expenses: {

@@ -1,4 +1,4 @@
-import type { Expenses } from "./Expenses";
+import type { Expense } from "./Expenses";
 
 export interface Dashboard {
   month: number;
@@ -6,7 +6,7 @@ export interface Dashboard {
   totalSpent: number;
   budgetUtilization: BudgetUtilization[];
   dailySpending: DailySpending[];
-  recentExpenses: Expenses[];
+  recentExpenses: Expense[];
 }
 
 export interface BudgetUtilization {

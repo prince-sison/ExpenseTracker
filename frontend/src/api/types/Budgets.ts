@@ -1,4 +1,4 @@
-export interface Budgets {
+export interface Budget {
   id: string;
   limitAmount: number;
   categoryId: string;
