@@ -11,7 +11,7 @@ public class BudgetsController(IBudgetService service) : ControllerBase
     private readonly IBudgetService _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> GetBugetsByMonthAndYear([FromQuery] int month, [FromQuery] int year)
+    public async Task<IActionResult> GetBudgetsByMonthAndYear([FromQuery] int month, [FromQuery] int year)
         => Ok(await _service.GetBudgetsAsync(month, year));
 
     [HttpPost]

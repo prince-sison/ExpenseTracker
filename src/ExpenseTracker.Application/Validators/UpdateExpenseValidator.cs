@@ -7,9 +7,6 @@ public class UpdateExpenseValidator : AbstractValidator<UpdateExpenseDto>
 {
     public UpdateExpenseValidator()
     {
-        RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("An expense id is required.");
-
         RuleFor(x => x.Amount)
             .GreaterThan(0).WithMessage("Amount must be greater than zero.")
             .LessThanOrEqualTo(999_999.99m).WithMessage("Amount exceeds the maximum allowed.");
