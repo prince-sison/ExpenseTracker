@@ -17,6 +17,7 @@ export const useUpdateExpense = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.expenses.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.all });
     },
     onError: (error) => {
       console.error("Error updating expense:", error);

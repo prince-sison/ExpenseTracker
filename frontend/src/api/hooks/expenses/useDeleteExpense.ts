@@ -15,6 +15,7 @@ export const useDeleteExpense = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.expenses.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.all });
     },
     onError: (error) => {
       console.error("Error deleting expense:", error);

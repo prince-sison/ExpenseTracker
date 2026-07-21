@@ -12,6 +12,7 @@ export const useCreateExpense = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.expenses.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.all });
     },
     onError: (error) => {
       console.error("Error creating expense:", error);

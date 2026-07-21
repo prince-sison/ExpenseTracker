@@ -1,9 +1,9 @@
 import { baseApiProvider as api } from "../baseApi";
 import { buildPath, Routes } from "../router/routes";
-import type { UpsertBudgetRequest } from "../types/Budgets";
+import type { Budgets, UpsertBudgetRequest } from "../types/Budgets";
 
 export const budgetService = {
-  getBudget: async (month: number, year: number): Promise<number> => {
+  getBudget: async (month: number, year: number): Promise<Budgets[]> => {
     const url = buildPath(Routes.getBudgetsByMonthAndYear);
     const response = await api.get(url, {
       params: { month, year },
@@ -11,9 +11,10 @@ export const budgetService = {
     return response.data;
   },
 
-  upsertBudget: async (budgetData: UpsertBudgetRequest): Promise<void> => {
+  upsertBudget: async (budgetData: UpsertBudgetRequest): Promise<Budgets> => {
     const url = buildPath(Routes.upsertBudget);
-    await api.post(url, budgetData);
+    const response = await api.post(url, budgetData);
+    return response.data;
   },
 
   deleteBudget: async (budgetId: string): Promise<void> => {
