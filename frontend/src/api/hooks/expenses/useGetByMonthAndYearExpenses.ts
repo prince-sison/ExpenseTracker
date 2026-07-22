@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { expenseService } from "../../services/expenseService";
 import type { Expense } from "../../types/Expenses";
-import { queryKeys } from "../../router/queryKeys";
+import { queryKeys } from "../../types/queryKeys";
 
 export const useGetByMonthAndYearExpenses = (
   month: number,

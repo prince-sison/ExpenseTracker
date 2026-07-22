@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "../../router/queryKeys";
+import { queryKeys } from "../../types/queryKeys";
 import { dashboardService } from "../../services/dashboardService";
 import type { Dashboard } from "../../types/Dashboard";
 
