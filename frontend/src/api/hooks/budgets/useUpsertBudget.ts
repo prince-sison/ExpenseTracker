@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { budgetService } from "../../services/budgetService";
 import type { UpsertBudgetRequest } from "../../types/Budgets";
-import { queryKeys } from "../../router/queryKeys";
+import { queryKeys } from "../../types/queryKeys";
 
 export const useUpsertBudget = () => {
   const queryClient = useQueryClient();

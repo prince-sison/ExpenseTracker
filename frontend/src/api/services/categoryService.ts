@@ -1,5 +1,5 @@
 import { baseApiProvider as api } from "../baseApi";
-import { buildPath, Routes } from "../router/routes";
+import { buildPath, Routes } from "../types/routes";
 import type {
   Category,
   CreateCategoryRequest,

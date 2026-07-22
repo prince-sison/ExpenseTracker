@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CreateCategoryRequest } from "../../types/Categories";
 import { categoryService } from "../../services/categoryService";
-import { queryKeys } from "../../router/queryKeys";
+import { queryKeys } from "../../types/queryKeys";
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();

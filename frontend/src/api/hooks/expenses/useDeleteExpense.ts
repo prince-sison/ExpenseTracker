@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { expenseService } from "../../services/expenseService";
-import { queryKeys } from "../../router/queryKeys";
+import { queryKeys } from "../../types/queryKeys";
 
 interface DeleteExpenseArgs {
   expenseId: string;
