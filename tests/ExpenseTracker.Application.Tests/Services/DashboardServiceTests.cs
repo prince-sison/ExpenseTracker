@@ -3,7 +3,7 @@ using ExpenseTracker.Domain.Entities;
 using ExpenseTracker.Domain.Repositories;
 using NSubstitute;
 
-namespace ExpenseTracker.Tests.Services;
+namespace ExpenseTracker.Application.Tests.Services;
 
 public class DashboardServiceTests
 {
