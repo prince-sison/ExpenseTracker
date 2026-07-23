@@ -3,7 +3,7 @@ import { categorySchema } from "./categorySchema";
 import { useUpdateCategory } from "../../../api/hooks/categories/useUpdateCategory";
 import type { Category } from "../../../api/types/Categories";
 import type { CategoryFormValues } from "./categorySchema";
-import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface EditCategoryModalProps {
   category: Category | null;
