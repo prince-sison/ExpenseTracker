@@ -25,16 +25,29 @@ export default function CategoryForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex items-end gap-3">
       <div className="flex flex-col">
-        <label className="label">Name</label>
-        <input className="input input-bordered" {...register("name")} />
+        <label className="label" htmlFor="new-category-name">
+          Name
+        </label>
+        <input
+          id="new-category-name"
+          className="input input-bordered"
+          {...register("name")}
+        />
         {errors.name && (
           <span className="text-error text-sm">{errors.name.message}</span>
         )}
       </div>
 
       <div className="flex flex-col">
-        <label className="label">Color</label>
-        <input type="color" className="h-10 w-16" {...register("color")} />
+        <label className="label" htmlFor="new-category-color">
+          Color
+        </label>
+        <input
+          id="new-category-color"
+          type="color"
+          className="h-10 w-16"
+          {...register("color")}
+        />
         {errors.color && (
           <span className="text-error text-sm">{errors.color.message}</span>
         )}

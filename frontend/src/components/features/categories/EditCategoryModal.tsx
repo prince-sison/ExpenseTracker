@@ -35,7 +35,14 @@ export default function EditCategoryModal({
   if (!category) return null;
 
   return (
-    <dialog className="modal modal-open">
+    <dialog
+      className="modal modal-open"
+      open
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+    >
       <div className="modal-box">
         <h3 className="text-lg font-bold">Edit Category</h3>
 
@@ -43,14 +50,30 @@ export default function EditCategoryModal({
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-3 pt-4"
         >
-          <input className="input input-bordered" {...register("name")} />
-          {errors.name && (
-            <span className="text-error text-sm">{errors.name.message}</span>
-          )}
+          <div className="flex flex-col">
+            <label className="label" htmlFor="edit-category-name">
+              Name
+            </label>
+            <input
+              id="edit-category-name"
+              className="input input-bordered"
+              {...register("name")}
+            />
+            {errors.name && (
+              <span className="text-error text-sm">{errors.name.message}</span>
+            )}
+          </div>
 
           <div className="flex flex-col">
-            <label className="label">Color</label>
-            <input type="color" className="h-10 w-16" {...register("color")} />
+            <label className="label" htmlFor="edit-category-color">
+              Color
+            </label>
+            <input
+              id="edit-category-color"
+              type="color"
+              className="h-10 w-16"
+              {...register("color")}
+            />
             {errors.color && (
               <span className="text-error text-sm">{errors.color.message}</span>
             )}
