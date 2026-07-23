@@ -6,9 +6,9 @@ export default function Layout() {
       data-theme="night"
       className="flex min-h-screen bg-base-100 text-base-content"
     >
-      {/* Sidebar comes in Task 5.5 */}
+      {/* Sidebar navigation */}
       <Sidebar />
-      <main className="p-6">
+      <main className="flex-1 p-6">
         <Outlet />
       </main>
     </div>

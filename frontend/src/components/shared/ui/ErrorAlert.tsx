@@ -5,12 +5,14 @@ interface ErrorAlertProps {
 
 export default function ErrorAlert({ message, onRetry }: ErrorAlertProps) {
   return (
-    <div className="alert alert-error">
+    <div role="alert" aria-live="assertive" className="alert alert-error">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6 shrink-0 stroke-current"
         fill="none"
         viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
       >
         <path
           strokeLinecap="round"
@@ -21,7 +23,7 @@ export default function ErrorAlert({ message, onRetry }: ErrorAlertProps) {
       </svg>
       <span>{message}</span>
       {onRetry && (
-        <button className="btn btn-sm" onClick={onRetry}>
+        <button type="button" className="btn btn-sm" onClick={onRetry}>
           Retry
         </button>
       )}

@@ -14,8 +14,16 @@ export default function LoadingSpinner({
   }[size];
 
   return (
-    <div className="flex items-center justify-center gap-2 p-4">
-      <span className={`loading loading-spinner ${sizeClass}`} />
+    <div
+      className="flex items-center justify-center gap-2 p-4"
+      role="status"
+      aria-live="polite"
+      aria-label={label ?? "Loading"}
+    >
+      <span
+        className={`loading loading-spinner ${sizeClass}`}
+        aria-hidden="true"
+      />
       {label && <span className="text-base-content/70">{label}</span>}
     </div>
   );
