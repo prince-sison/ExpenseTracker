@@ -1,7 +1,9 @@
+type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
 interface MonthSelectorProps {
-  month: number;
+  month: Month;
   year: number;
-  onChange: (month: number, year: number) => void;
+  onChange: (month: Month, year: number) => void;
 }
 
 const MONTH_NAMES = [
@@ -28,7 +30,7 @@ export default function MonthSelector({
     if (month === 1) {
       onChange(12, year - 1);
     } else {
-      onChange(month - 1, year);
+      onChange((month - 1) as Month, year);
     }
   };
 
@@ -36,7 +38,7 @@ export default function MonthSelector({
     if (month === 12) {
       onChange(1, year + 1);
     } else {
-      onChange(month + 1, year);
+      onChange((month + 1) as Month, year);
     }
   };
 
