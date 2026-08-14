@@ -2,7 +2,7 @@ import type { Expense } from "./expenses.types";
 import { useGetAllCategories } from "../categories/useGetAllCategories";
 import { expenseSchema, type ExpenseFormValues } from "./expenseSchema";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdateExpense } from "./useUpdateExpense";
 
 interface EditExpenseModalProps {
@@ -143,7 +143,7 @@ export default function EditExpenseModal({
             )}
           </div>
 
-          <div className="modal-acation">
+          <div className="modal-action">
             <button type="button" className="btn" onClick={onClose}>
               Cancel
             </button>
