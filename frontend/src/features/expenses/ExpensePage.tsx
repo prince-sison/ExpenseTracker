@@ -4,6 +4,7 @@ import { useGetByMonthAndYearExpenses } from "./useGetByMonthAndYearExpenses";
 import MonthSelector, {
   type Month,
 } from "@/shared/components/ui/MonthSelector";
+import ErrorAlert from "@/shared/components/ui/ErrorAlert";
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseDataGrid from "./ExpenseDataGrid";
 import EditExpenseModal from "./EditExpenseModal";
@@ -17,10 +18,12 @@ export default function ExpensePage() {
   const [editing, setEditing] = useState<Expense | null>(null);
   const [deleting, setDeleting] = useState<Expense | null>(null);
 
-  const { data: expenses = [], isLoading } = useGetByMonthAndYearExpenses(
-    month,
-    year,
-  );
+  const {
+    data: expenses = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useGetByMonthAndYearExpenses(month, year);
 
   return (
     <div className="flex flex-col gap-6">
@@ -38,6 +41,14 @@ export default function ExpensePage() {
       </div>
 
       <AddExpenseForm />
+
+      {isError && (
+        <ErrorAlert
+          message="Failed to load expenses."
+          onRetry={() => refetch()}
+        />
+      )}
+
       <ExpenseDataGrid
         expenses={expenses}
         isLoading={isLoading}
