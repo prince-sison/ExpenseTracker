@@ -44,6 +44,25 @@ function WaitForDbHealthy {
 
 function ApplyMigrations {
     Write-Output "Applying EF Core migrations..."
+
+    # The migration runs on the host, so it must reach the DB via the published
+    # host port (localhost) rather than the compose service name. Query the
+    # container for the actual published port so this stays correct even when a
+    # non-default DB_HOST_PORT was used to create it.
+    $portMapping = (&docker port expense-tracker-db 1433 2>$null | Select-Object -First 1)
+    if ($portMapping -match ':(\d+)\s*$') {
+        $dbPort = $Matches[1]
+    } elseif ($env:DB_HOST_PORT) {
+        $dbPort = $env:DB_HOST_PORT
+    } else {
+        $dbPort = "1433"
+    }
+    $dbName = if ($env:DB_NAME) { $env:DB_NAME } else { "ExpenseTracker" }
+    $dbUser = if ($env:DB_ADMIN_USER) { $env:DB_ADMIN_USER } else { "sa" }
+    $dbPassword = if ($env:DB_ADMIN_PASSWORD) { $env:DB_ADMIN_PASSWORD } else { "MyStrongPassword123@" }
+
+    $env:ConnectionStrings__DefaultConnection = "Server=localhost,$dbPort;Database=$dbName;User Id=$dbUser;Password=$dbPassword;TrustServerCertificate=True;MultipleActiveResultSets=true"
+
     &dotnet ef database update -p (Join-Path $RepoRoot "src/ExpenseTracker.Infrastructure") -s (Join-Path $RepoRoot "src/ExpenseTracker.API")
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Migration failed (dotnet ef exited with code $LASTEXITCODE)."
@@ -129,6 +148,10 @@ function ResetCommand {
             &docker compose -f $ComposeFile rm -s -f -v expense-tracker-db
             &docker volume rm expense-tracker-sql_mssql-data -f
         }
+        "api" {
+            Write-Output "Resetting API (removing container)..."
+            &docker compose -f $ComposeFile rm -s -f -v expense-tracker-api
+        }
         default {
             Write-Output "Resetting all containers and volumes..."
             &docker compose -f $ComposeFile down -v
@@ -167,6 +190,7 @@ function Help {
     Write-Host ""
     Write-Host "  reset [sub-command]"
     Write-Host "    sql              - Reset the database (remove container + data volume)"
+    Write-Host "    api              - Reset the API (remove container)"
     Write-Host "    [no sub-command] - Reset all containers and volumes"
     Write-Host ""
     Write-Host "  logs [serviceName] - Follow logs for all or a specific service"
